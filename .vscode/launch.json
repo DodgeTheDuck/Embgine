@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+      {
+        "name": "Launch",
+        "type": "node",
+        "request": "launch",
+        "cwd": "${workspaceRoot}",
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+        "windows": {
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+        }, 
+        "program": "${workspaceRoot}/app/main.js",        
+        "outFiles": ["${workspaceRoot}/app/js/**.**"],
+        "sourceMaps": true,
+        "protocol": "inspector",
+        "trace": "all",
+        "runtimeArgs": [
+          "--nolazy"
+        ],
+        "env": {
+				  "NODE_ENV": "development"
+			  }
+      }
+    ]
+  }
