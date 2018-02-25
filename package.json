@@ -1,11 +1,23 @@
 {
-    "name": "hackslash",
-    "version": "1.2.3",
+    "name": "ember-engine-src",
+    "version": "0.0.2",
     "description": "",
-    "main": "main.js",
-    "dependencies": {
-        "@types/electron": "^1.6.10",
-        "electron": "^1.7.9",
-        "node": "^9.0.0"
+    "main": "app/main.js",
+    "scripts": {
+        "postinstall": "install-app-deps",
+        "start": "npm install && electron ./app",
+        "pack": "build --dir",
+        "dist": "build"
+      },
+      "build": {
+        "appId": "yourappid",          
+        "win": {
+          "target": "NSIS"
+        }
+      },
+      "dependencies": {},
+      "devDependencies": {
+        "electron": "latest",
+        "electron-builder": "latest"
+      }
     }
-}

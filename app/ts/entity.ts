@@ -1,62 +1,82 @@
 
 class Entity {
 
-    protected _body: PHYS.Body;
-    protected _world: PHYS.World;
-    protected _controller: Controller;
+    protected _body: PHYS.RigidBody;
 
-    constructor(world: PHYS.World ) {
-        this._world = world;
+    private _components: IComponent[];
+
+    constructor() {
+        this._components = [];
+    }
+
+    public Component<T extends IComponent>(t: new () => T): T {
+        let temp: T = new t();
+        for( let component of this._components) {
+            if( component instanceof t) {
+                return <T>component;
+            }
+        }
+        return null;
+    }
+
+    public HasComponent<T extends IComponent>(t: new () => T): boolean {
+        let temp: T = new t();
+        for( let component of this._components) {
+            if( component instanceof t) {
+                return true
+            }
+        }
+        return false;
+    }
+
+    public AddComponent<T extends IComponent>(t: new () => T): T {
+        let c = new t();
+        this._components.push(c);
+        return c;
     }
 
     public Logic(): void {
-        if( this._controller) this._controller.Logic();
+        for( let component of this._components) {
+            component.Logic();
+        }
     }
 
     public Draw(): void {
-        if( this._controller) this._controller.Draw();
+        let transform = this.Component(CTransform);
+        G.GFX.Save();
+        if(transform) {
+            G.GFX.Translate(transform.position.x, transform.position.y);
+        }   
+        for( let component of this._components) {
+            component.Draw();
+        }
+        G.GFX.Restore();
+    }
+
+    public GetBody(): PHYS.RigidBody {
+        return this._body;
     }
 
 }
 
-class EntPlayer extends Entity {
+class Mob extends Entity {
 
-    constructor(x: number, y: number, world: PHYS.World ) {
-        super(world);
-        this._body = new PHYS.RigidBody();
-        this._body.SetHull(new PHYS.HullCircle(this._body, 4));
-        this._body.SetPosition(new MATH.Vector2(x, y));
-        this._world.RegisterBody(this._body);
-        this._controller = new ConPlayer(this._body);
-    }
+    protected _controller: Controller;
+    protected _sprite: G.GFX.Sprite;
 
     public Logic(): void {
+        if( this._controller) this._controller.Logic();
         super.Logic();
     }
 
     public Draw(): void {
+        if( this._sprite ) {
+            G.GFX.Translate(this._body.GetPosition().x, this._body.GetPosition().y);
+            this._sprite.Draw();
+            G.GFX.Translate(-this._body.GetPosition().x, -this._body.GetPosition().y);
+        }
+        if( this._controller) this._controller.Draw();        
         super.Draw();
     }
 
 }
-
-class EntTest extends Entity {
-    
-        constructor(x: number, y: number, world: PHYS.World ) {
-            super(world);
-            this._body = new PHYS.RigidBody();
-            this._body.SetHull(new PHYS.HullCircle(this._body, 4));
-            this._body.SetPosition(new MATH.Vector2(x, y));
-            this._world.RegisterBody(this._body);
-        }
-    
-        public Logic(): void {
-            super.Logic();
-            this._body.Impulse(0.0002, 0);
-        }
-    
-        public Draw(): void {
-            super.Draw();
-        }
-    
-    }

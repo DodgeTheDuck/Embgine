@@ -8,7 +8,8 @@ var ASSETS;
         }
     }
     const Assets = [
-        new Asset("GRASS_TILE", new GFX.Sprite(SPRITE_PATH + "test.png")),
+        new Asset("PLAYER", new G.GFX.Sprite(SPRITE_PATH + "player.png")),
+        new Asset("GRASS_TILE", new G.GFX.Sprite(SPRITE_PATH + "test.png")),
     ];
     function FindAsset(key) {
         let obj = new Asset("", null);

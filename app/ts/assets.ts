@@ -13,7 +13,8 @@ module ASSETS {
     }
 
     const Assets: Array<Asset<any>> = [
-        new Asset<GFX.Sprite>("GRASS_TILE", new GFX.Sprite(SPRITE_PATH + "test.png")),
+        new Asset<G.GFX.Sprite>("PLAYER", new G.GFX.Sprite(SPRITE_PATH + "player.png")),
+        new Asset<G.GFX.Sprite>("GRASS_TILE", new G.GFX.Sprite(SPRITE_PATH + "test.png")),
     ];
 
     function FindAsset(key: string): Asset<any> {

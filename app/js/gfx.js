@@ -2,7 +2,7 @@ var electron = require("electron");
 var GFX;
 (function (GFX) {
     let scaleStack = Array();
-    let prevScale = MATH.Vector2.Zero();
+    let prevScale = M.Vector2.Zero();
     class Display {
         constructor(screen) {
             this._screen = screen;
@@ -45,7 +45,7 @@ var GFX;
     }
     GFX.ScalingMode = ScalingMode;
     function Init(c) {
-        scaleStack.push(new MATH.Vector2(1, 1));
+        scaleStack.push(new M.Vector2(1, 1));
         GFX.context = c;
         GFX.display = new Display(electron.screen);
         GFX.context.canvas.width = GFX.display.width;
@@ -54,7 +54,7 @@ var GFX;
     GFX.Init = Init;
     function Save() {
         GFX.context.save();
-        scaleStack.push(new MATH.Vector2(scaleStack[scaleStack.length - 1].x, scaleStack[scaleStack.length - 1].y));
+        scaleStack.push(new M.Vector2(scaleStack[scaleStack.length - 1].x, scaleStack[scaleStack.length - 1].y));
     }
     GFX.Save = Save;
     function Restore() {
@@ -69,9 +69,13 @@ var GFX;
     GFX.Translate = Translate;
     function Scale(x, y) {
         GFX.context.scale(x, y);
-        scaleStack[scaleStack.length - 1] = new MATH.Vector2(x, y);
+        scaleStack[scaleStack.length - 1] = new M.Vector2(x, y);
     }
     GFX.Scale = Scale;
+    function Rotate(angle) {
+        GFX.context.rotate(angle);
+    }
+    GFX.Rotate = Rotate;
     function GetScale() {
         return prevScale;
     }
@@ -80,5 +84,23 @@ var GFX;
         GFX.context.clearRect(0, 0, GFX.display.width, GFX.display.height);
     }
     GFX.Clear = Clear;
+    function DrawCircle(x, y, r) {
+    }
+    GFX.DrawCircle = DrawCircle;
+    function DrawPolygon(points) {
+        GFX.context.beginPath();
+        for (let i = 0; i < points.length; i++) {
+            if (i === 0) {
+                GFX.context.moveTo(points[0].x, points[0].y);
+            }
+            else {
+                GFX.context.lineTo(points[i].x, points[i].y);
+            }
+        }
+        GFX.context.lineTo(points[0].x, points[0].y);
+        GFX.context.stroke();
+        GFX.context.closePath();
+    }
+    GFX.DrawPolygon = DrawPolygon;
 })(GFX || (GFX = {}));
 //# sourceMappingURL=gfx.js.map

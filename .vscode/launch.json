@@ -13,7 +13,7 @@
         "program": "${workspaceRoot}/app/main.js",        
         "outFiles": ["${workspaceRoot}/app/js/**.**"],
         "sourceMaps": true,
-        "protocol": "inspector",
+        // "protocol": "inspector",
         "trace": "all",
         "runtimeArgs": [
           "--nolazy"

@@ -1,45 +1,64 @@
 class Entity {
-    constructor(world) {
-        this._world = world;
+    constructor() {
+        this._components = [];
     }
+    Component(t) {
+        let temp = new t();
+        for (let component of this._components) {
+            if (component instanceof t) {
+                return component;
+            }
+        }
+        return null;
+    }
+    HasComponent(t) {
+        let temp = new t();
+        for (let component of this._components) {
+            if (component instanceof t) {
+                return true;
+            }
+        }
+        return false;
+    }
+    AddComponent(t) {
+        let c = new t();
+        this._components.push(c);
+        return c;
+    }
+    Logic() {
+        for (let component of this._components) {
+            component.Logic();
+        }
+    }
+    Draw() {
+        let transform = this.Component(CTransform);
+        G.GFX.Save();
+        if (transform) {
+            G.GFX.Translate(transform.position.x, transform.position.y);
+        }
+        for (let component of this._components) {
+            component.Draw();
+        }
+        G.GFX.Restore();
+    }
+    GetBody() {
+        return this._body;
+    }
+}
+class Mob extends Entity {
     Logic() {
         if (this._controller)
             this._controller.Logic();
+        super.Logic();
     }
     Draw() {
+        if (this._sprite) {
+            G.GFX.Translate(this._body.GetPosition().x, this._body.GetPosition().y);
+            this._sprite.Draw();
+            G.GFX.Translate(-this._body.GetPosition().x, -this._body.GetPosition().y);
+        }
         if (this._controller)
             this._controller.Draw();
-    }
-}
-class EntPlayer extends Entity {
-    constructor(x, y, world) {
-        super(world);
-        this._body = new PHYS.RigidBody();
-        this._body.SetHull(new PHYS.HullCircle(this._body, 4));
-        this._body.SetPosition(new MATH.Vector2(x, y));
-        this._world.RegisterBody(this._body);
-        this._controller = new ConPlayer(this._body);
-    }
-    Logic() {
-        super.Logic();
-    }
-    Draw() {
-        super.Draw();
-    }
-}
-class EntTest extends Entity {
-    constructor(x, y, world) {
-        super(world);
-        this._body = new PHYS.RigidBody();
-        this._body.SetHull(new PHYS.HullCircle(this._body, 4));
-        this._body.SetPosition(new MATH.Vector2(x, y));
-        this._world.RegisterBody(this._body);
-    }
-    Logic() {
-        super.Logic();
-        this._body.Impulse(0.0002, 0);
-    }
-    Draw() {
         super.Draw();
     }
 }

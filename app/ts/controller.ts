@@ -1,10 +1,10 @@
 
 class Controller {
 
-    protected _body: PHYS.Body;
+    protected _entity: Entity;
 
-    constructor(body: PHYS.Body) {
-        this._body = body;
+    constructor(entity: Entity) {
+        this._entity = entity;
     }
 
     public Logic(): void {
@@ -15,25 +15,4 @@ class Controller {
 
     }
 
-}
-
-class ConPlayer extends Controller {
-
-    constructor(body: PHYS.Body) {
-        super(body);
-    }
-
-    public Logic(): void {
-        super.Logic();        
-        if( this._body.GetPosition().DistanceTo(MATH.Vector2.Divide(INPUT.mouseXY, GFX.GetScale())) > 8 ) { 
-            let d = MATH.Vector2.Sub(this._body.GetPosition(), MATH.Vector2.Divide(INPUT.mouseXY, GFX.GetScale()));
-            let angle = Math.atan2(d.y, d.x) - Math.PI; 
-            this._body.Impulse(0.02, angle);
-        }
-    }
-
-    public Draw(): void {
-        super.Draw();
-    }
-    
 }

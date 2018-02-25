@@ -6,7 +6,7 @@ let win
 
 function createWindow () {
 
-  win = new BrowserWindow({width: 1024, height: 768, frame: false, useContentSize: true})
+  win = new BrowserWindow({width: 1600, height: 1024, frame: false, useContentSize: true})
 
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'client.html'),

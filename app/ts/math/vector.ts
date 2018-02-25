@@ -1,5 +1,5 @@
 
-module MATH {
+module M {
 
     export class Vector2 {
 
@@ -19,13 +19,37 @@ module MATH {
             return new Vector2(left.x * right.x, left.y * right.y);
         }
 
-        public static Divide(left: Vector2, right: Vector2 ): Vector2 {
-            if( left.x === 0 || left.y === 0 || right.y === 0 || right.x === 0) {
-                return MATH.Vector2.Zero();
+        public static Divide(left: Vector2, right: any ): Vector2 {
+            if( right.x != undefined && right.y != undefined ) {
+                if( left.x === 0 || left.y === 0 || right.y === 0 || right.x === 0) {
+                    return M.Vector2.Zero();
+                } else {
+                    return new Vector2(left.x / right.x, left.y / right.y);
+                }
             } else {
-                return new Vector2(left.x / right.x, left.y / right.y);
+                if( right === 0) {
+                    return M.Vector2.Zero();
+                } else {
+                    return new Vector2(left.x / right, left.y / right);
+                }
             }
         }
+
+        public static Normal(left: Vector2): Vector2 {
+            return Vector2.Divide( left, left.Magnitude());
+        }
+
+        public static Distance(a: Vector2, b: Vector2): number {
+            return M.sqrt( M.pow(b.x - a.x, 2) + M.pow(b.y - a.y, 2) );
+        }
+
+        public static Angle(a: Vector2, b: Vector2): number {
+            return M.atan2(b.y - a.y, b.x - a.x);
+        }
+
+        public static Dot(a, b): number {
+            return a.x * b.x + a.y * b.y;
+        };
 
         public x: number;
         public y: number;
@@ -48,6 +72,11 @@ module MATH {
         public Mult(other: Vector2): void {
             this.x *= other.x;
             this.y *= other.y;
+        }
+
+        public MultScalar(other: number): void {
+            this.x *= other;
+            this.y *= other;
         }
 
         public Zero(): void {

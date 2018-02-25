@@ -23,17 +23,17 @@ class TileMap {
         }
     }
     Draw() {
-        GFX.Save();
+        G.GFX.Save();
         for (let i = 0; i < this._cols; i++) {
             for (let j = 0; j < this._rows; j++) {
                 if (this._tiles[i][j]) {
                     this._tiles[i][j].Draw();
                 }
-                GFX.Translate(0, this._tileSize);
+                G.GFX.Translate(0, this._tileSize);
             }
-            GFX.Translate(this._tileSize, -(this._tileSize * this._rows));
+            G.GFX.Translate(this._tileSize, -(this._tileSize * this._rows));
         }
-        GFX.Restore();
+        G.GFX.Restore();
     }
 }
 //# sourceMappingURL=map.js.map

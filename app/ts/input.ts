@@ -1,12 +1,52 @@
 
 module INPUT {
 
+    export let keys: Key[] = [];
     export let mouseLeft: boolean = false;
     export let mouseRight: boolean = false;
-    export let mouseXY: MATH.Vector2 = MATH.Vector2.Zero();
+    export let mouseXY: M.Vector2 = M.Vector2.Zero();
 
-    export class KeyState {
+    export const KEY_W = 87;
+    export const KEY_A = 65;
+    export const KEY_D = 68;
+    export const KEY_S = 83;
+    export const KEY_SPACE = 32;
 
+    export enum EKeyState {
+        UP,
+        DOWN
+    }
+
+    export class Key {
+        public state = EKeyState.UP;
+    }
+
+    export function IsKeyDown(keyCode: number) {
+        if(INPUT.keys[keyCode]) {
+            return INPUT.keys[keyCode].state === EKeyState.DOWN;
+        }
+        return false;
+    }
+
+    export function IsKeyUp(keyCode: number) {
+        if(INPUT.keys[keyCode]) {
+            return INPUT.keys[keyCode].state === EKeyState.UP;
+        }
+        return false;
+    }
+
+    window.onkeydown = (ev: KeyboardEvent): void => {
+        if( keys[ev.keyCode] === undefined ) {
+            keys[ev.keyCode] = new Key();
+        }
+        keys[ev.keyCode].state = EKeyState.DOWN;
+    }
+
+    window.onkeyup = (ev: KeyboardEvent): void => {
+        if( keys[ev.keyCode] === undefined ) {
+            keys[ev.keyCode] = new Key();
+        }
+        keys[ev.keyCode].state = EKeyState.UP;
     }
 
     window.onmousemove = (ev: MouseEvent): void => {
