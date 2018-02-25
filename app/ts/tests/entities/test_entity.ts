@@ -3,12 +3,18 @@ class TestEntity extends Entity {
 
     constructor() {
         super();
+        
         this.AddComponent(CTransform);
+
         this.AddComponent(CRigidBody)
             .Plug(this.Component(CTransform));
+
         this.AddComponent(CRenderer);
 
-        this.Component(CRigidBody).LinearImpulse(5, 45);
+        this.AddComponent(CController)
+            .Plug(this.Component(CRigidBody))
+
+        this.Component(CController).controller = new TestController();
 
     }
 

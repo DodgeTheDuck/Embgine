@@ -154,6 +154,20 @@ class CRigidBody extends CBody {
 
 }
 
+class CController extends IComponent {
+
+    public controller: IController;
+
+    public Logic(): void {
+        this.controller.Control(this.Component(CRigidBody))
+    }
+
+    public Draw(): void {
+        
+    }
+
+}
+
 class CRenderer extends IComponent {        
 
     public Logic(): void {

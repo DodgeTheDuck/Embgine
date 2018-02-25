@@ -58,25 +58,3 @@ class Entity {
     }
 
 }
-
-class Mob extends Entity {
-
-    protected _controller: Controller;
-    protected _sprite: G.GFX.Sprite;
-
-    public Logic(): void {
-        if( this._controller) this._controller.Logic();
-        super.Logic();
-    }
-
-    public Draw(): void {
-        if( this._sprite ) {
-            G.GFX.Translate(this._body.GetPosition().x, this._body.GetPosition().y);
-            this._sprite.Draw();
-            G.GFX.Translate(-this._body.GetPosition().x, -this._body.GetPosition().y);
-        }
-        if( this._controller) this._controller.Draw();        
-        super.Draw();
-    }
-
-}
