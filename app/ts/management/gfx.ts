@@ -5,8 +5,10 @@ namespace G {
     
     export namespace GFX {
 
+        export let canvas: HTMLCanvasElement;
         export let context: CanvasRenderingContext2D;
         export let display: Display;
+        export let SVG: SVGSVGElement;
 
         let scaleStack = Array<M.Vector2>();
         let prevScale: M.Vector2 = M.Vector2.Zero();
@@ -51,8 +53,13 @@ namespace G {
         }
 
         export enum EScalingMode {
-            Smooth,
-            Nearest,
+            SMOOTH,
+            NEAREST,
+        }
+
+        export enum ELineMode {
+            SOLID,
+            DASHED
         }
 
         export interface ColorRGB {
@@ -61,23 +68,33 @@ namespace G {
             b: number
         }
 
+        export const COL_WHITE: ColorRGB = {r: 255, g: 255, b: 255};
+        export const COL_RED: ColorRGB = {r: 255, g: 0, b: 0};
+        export const COL_GREEN: ColorRGB = {r: 0, g: 255, b: 0};
+        export const COL_BLUE: ColorRGB = {r: 0, g: 0, b: 255};
+        export const COL_BLACK: ColorRGB = {r: 0, g: 0, b: 0};
+
         export function ScalingMode(mode: EScalingMode): void {
             switch (mode) {
-                case EScalingMode.Smooth:
+                case EScalingMode.SMOOTH:
                     context.imageSmoothingEnabled = true;
                     break;
-                case EScalingMode.Nearest:
+                case EScalingMode.NEAREST:
                     context.imageSmoothingEnabled = false;
                     break;
             }
         }
 
-        export function Init(c: CanvasRenderingContext2D): void {
+        export function Init(can: HTMLCanvasElement, con: CanvasRenderingContext2D): void {
             scaleStack.push(new M.Vector2(1, 1));
-            context = c;
+            SVG = <SVGSVGElement><any>document.getElementById("SVG"); //FIXME: this is so hacky
+            canvas = can;
+            context = con;
             display = new Display(electron.screen);
             context.canvas.width = display.width;
-            context.canvas.height = display.height;
+            context.canvas.height = display.height;  
+            ScalingMode(EScalingMode.NEAREST);
+            // Translate(0.5, 0.5);
         }
 
         export function Save(): void {
@@ -102,7 +119,7 @@ namespace G {
         }
 
         export function Rotate(angle: number): void {
-            context.rotate(angle);
+            context.rotate(angle*Math.PI/180);
         }
 
         export function GetScale(): M.Vector2 {
@@ -119,7 +136,23 @@ namespace G {
             context.fillStyle = c;
         }
 
-        export function DrawPolygon(points: M.Vector2[]): void {
+        export function Pattern(pattern: CanvasPattern): void {
+            context.strokeStyle = pattern;
+            context.fillStyle = pattern;
+        }
+
+        export function LineMode(mode: ELineMode) {
+            switch(mode) {
+                case ELineMode.SOLID:
+                    context.setLineDash([]);
+                    break;
+                case ELineMode.DASHED:
+                    context.setLineDash([5, 5]);
+                    break;
+            }
+        }
+
+        export function DrawPolygon(points: M.Point[]): void {
 
             context.beginPath();        
             
@@ -144,21 +177,57 @@ namespace G {
             context.closePath();
         }
 
-        export function DrawRect(rect: M.RectExtents) {
+        export function DrawRect(rect: M.Rect) {
 
             context.beginPath();
-            context.rect(rect.x, rect.y, rect.w, rect.h);
+
+            switch(rect.kind) {
+                case M.ERectType.EXTENTS:
+                    context.rect(rect.x, rect.y, rect.w, rect.h);
+                    break;
+                case M.ERectType.ABSOLUTE:
+                    context.rect(rect.x0, rect.y0, rect.x1 - rect.x0, rect.y1 - rect.y0);
+                    break;
+            }
+ 
             context.stroke();
             context.closePath();
 
         }
 
-        export function FillRect(rect: M.RectExtents) {
+        export function FillRect(rect: M.Rect) {
 
-            context.beginPath();
-            context.rect(rect.x, rect.y, rect.w, rect.h);
+            context.beginPath();        
+            
+            switch(rect.kind) {
+                case M.ERectType.EXTENTS:
+                    context.rect(rect.x, rect.y, rect.w, rect.h);
+                    break;
+                case M.ERectType.ABSOLUTE:
+                    context.rect(rect.x0, rect.y0, rect.x1 - rect.x0, rect.y1 - rect.y0);
+                    break;
+            }
+
             context.fill();
             context.closePath();
+
+        }
+
+        export function FillText(text: string, position: M.Point): void {
+            context.fillText(text, position.x, position.y);
+        }
+
+        export function DebugDrawDimension(x0: number, y0: number, x1: number, y1: number, dim: number, offset: M.Vector2) {
+
+            // CAP
+            G.GFX.DrawRect({kind: M.ERectType.EXTENTS, x: x0 + offset.x - 3, y: y0 + offset.y - 3, w: 6, h: 6})
+
+            G.GFX.LineMode(G.GFX.ELineMode.DASHED);            
+            G.GFX.DrawLine(x0 + offset.x, y0 + offset.y, x1 + offset.x, y1 + offset.y);
+            G.GFX.LineMode(G.GFX.ELineMode.SOLID);
+            
+            // //CAP
+            G.GFX.DrawRect({kind: M.ERectType.EXTENTS, x: x1 + offset.x - 3, y: y1 + offset.y - 3, w: 6, h: 6})
 
         }
 

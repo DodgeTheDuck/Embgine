@@ -14,7 +14,7 @@ class TestEntity extends Entity {
         this.AddComponent(CController)
             .Plug(this.Component(CRigidBody))
 
-        this.Component(CController).controller = new TestController();
+        //this.Component(CController).controller = new TestController();
 
     }
 

@@ -3,18 +3,15 @@ class Test_GUI extends IState {
 
     public Init(): void {
                 
-        G.GUI.AddRegion(new GUIRegion(
-            {
-                x: 16, 
-                y: 16, 
-                w: G.GFX.display.width-32, 
-                h: G.GFX.display.height-32
-            }
-        ));
+        G.GUI.AddRegion(new DebugExplorer());
 
     }
 
     public Logic(): void {
+
+    }
+
+    public PreDraw(): void {
 
     }
 

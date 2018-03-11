@@ -1,7 +1,7 @@
 
 class GUIPanel extends IWidget {    
 
-    constructor(bounds: M.RectExtents) {
+    constructor(bounds: M.RectAbsolute) {
         super(bounds);
     }
 
@@ -9,15 +9,15 @@ class GUIPanel extends IWidget {
         super.Logic();
     }
 
-    public Draw(): void {
+    public Draw(treeDepth: number): void {
         
         G.GFX.Color({r: 200, g: 200, b: 200 });
         G.GFX.FillRect(this._bounds);
         
-        G.GFX.Color({r: 0, g: 0, b: 0 });
-        G.GFX.DrawRect(this._bounds);
+        // G.GFX.Color({r: 0, g: 0, b: 0 });
+        // G.GFX.DrawRect(this._bounds);
         
-        super.Draw();
+        super.Draw(treeDepth);
 
     }
 

@@ -41,16 +41,29 @@ class Entity {
         }
     }
 
+    public PreDraw(): void {
+        for( let component of this._components) {
+            component.PreDraw();
+        }
+    }
+
     public Draw(): void {
         let transform = this.Component(CTransform);
         G.GFX.Save();
         if(transform) {
             G.GFX.Translate(transform.position.x, transform.position.y);
+            G.GFX.Rotate(transform.angle);
         }   
         for( let component of this._components) {
             component.Draw();
         }
         G.GFX.Restore();
+    }
+
+    public PostDraw(): void {
+        for( let component of this._components) {
+            component.PostDraw();
+        }
     }
 
     public GetBody(): PHYS.RigidBody {

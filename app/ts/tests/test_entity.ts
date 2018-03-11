@@ -9,11 +9,15 @@ class Test_Entity extends IState {
 
         G.Worlds.Current().RegisterEntity(ent);
 
-        G.GUI.AddRegion(new DebugExplorer());
+        //G.GUI.AddRegion(new DebugExplorer());
 
     }
 
     public Logic(): void {
+
+    }
+
+    public PreDraw(): void {
 
     }
 

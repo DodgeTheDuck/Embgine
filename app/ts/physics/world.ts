@@ -46,11 +46,23 @@ module PHYS {
             let collisionEvents: CollisionEvent[] = this._CollisionPrediction();
             this._CollisionResolve(collisionEvents);
             this._Simulate();
-        }        
+        }
+
+        public PreDraw(): void {
+            for( let entity of this._entities) {
+                entity.PreDraw();
+            }
+        }
 
         public Draw(): void { 
             for( let entity of this._entities) {
                 entity.Draw();
+            }
+        }
+
+        public PostDraw(): void {
+            for( let entity of this._entities) {
+                entity.PostDraw();
             }
         }
 
@@ -129,8 +141,8 @@ module PHYS {
                 // bodyA.SetVelocity(new M.Vector2(newvxa, newvya));
                 // bodyB.SetVelocity(new M.Vector2(newvxb, newvyb))
 
-                let spring = new EffectSpring(event.me.parent, event.other.parent);
-                spring.Do();
+                //let spring = new EffectSpring(event.me.parent, event.other.parent);
+                //spring.Do();
 
                 break;
 

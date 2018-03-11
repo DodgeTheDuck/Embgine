@@ -7,6 +7,14 @@ module M {
             return new Vector2(0, 0);
         }
 
+        public static Right(): Vector2 {
+            return new Vector2(1, 0);
+        }
+
+        public static Up(): Vector2 {
+            return new Vector2(0, 1);
+        }
+
         public static Add(left: Vector2, right: Vector2 ): Vector2 {
             return new Vector2(left.x + right.x, left.y + right.y);
         }
@@ -74,9 +82,10 @@ module M {
             this.y *= other.y;
         }
 
-        public MultScalar(other: number): void {
+        public MultScalar(other: number): this {
             this.x *= other;
             this.y *= other;
+            return this;
         }
 
         public Zero(): void {
